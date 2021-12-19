@@ -1,0 +1,8 @@
+#!/bin/sh
+
+targetDirectory="$1"
+if [ -z "$targetDirectory" ]; then
+    targetDirectory='.'
+fi
+
+# TODO
