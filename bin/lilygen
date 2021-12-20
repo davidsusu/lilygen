@@ -1,8 +1,20 @@
 #!/bin/sh
 
-targetDirectory="$1"
-if [ -z "$targetDirectory" ]; then
-    targetDirectory='.'
-fi
+PROJECT_DIR="$( cd "$( dirname "$0" )/.." && pwd )"
 
-# TODO
+templateDirectory="${PROJECT_DIR}/template"
+
+rawTargetDirectory="$1"
+if [ -z "$rawTargetDirectory" ]; then
+    rawTargetDirectory='.'
+fi
+mkdir -p "$rawTargetDirectory"
+targetDirectory="$( cd "$rawTargetDirectory" && pwd )"
+
+rsync \
+    --recursive \
+    --ignore-existing \
+    --executability \
+    "${templateDirectory}/" \
+    "${targetDirectory}/" &&
+    echo "Successfully created: ${targetDirectory}" ;
