@@ -7,15 +7,30 @@ General lilypond sheet music template for composers.
 Download or clone the project,
 and add the `bin` directory to `PATH`.
 
-For example:
+Install with any shell:
 
 ```sh
-installDir=~/opt/lilygen # change as you like
+installDir="${HOME}/opt/lilygen"
 mkdir -p "$installDir"
 git clone https://github.com/davidsusu/lilygen.git "$installDir"
-echo 'export PATH="${PATH}:'"$installDir"'"' >> ~/.profile
-# or: echo 'export PATH="${PATH}:'"$installDir"'"' > ~/.bashrc.d/lilygen.bashrc
-source ~/.profile
+echo '' >> "${HOME}/.profile"
+echo '# LilyGen' >> "${HOME}/.profile"
+echo 'export PATH="${PATH}:'"$installDir"'"' >> "${HOME}/.profile"
+source "${HOME}/.profile"
+```
+
+Choose any `installDir` you like.
+
+It's better to not edit the `.profile` file,
+most shells provide more sophisticated methods
+For example, with bash:
+
+```bash
+installDir=~/opt/lilygen
+mkdir -p "$installDir"
+git clone https://github.com/davidsusu/lilygen.git "$installDir"
+echo 'export PATH="${PATH}:'"$installDir"'"' > ~/.bashrc.d/lilygen.bashrc
+. ~/.profile
 ```
 
 ## Usage
@@ -24,7 +39,7 @@ source ~/.profile
 lilygen [<target-directory]
 ```
 
-Default target directory is the current directory (`>.`).
+Default target directory is the current directory (`.`).
 
 
 
