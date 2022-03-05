@@ -2,19 +2,48 @@
 
 PROJECT_DIR="$( cd "$( dirname "$0" )/.." && pwd )"
 
+
+presetsDirectory="${PROJECT_DIR}/preset"
+
+if [ "$1" = '--help' ]; then
+    echo "Usage: lilygen [<target-dir> [<preset>]]"
+    echo ""
+    echo "  Available presets:"
+    for p in `ls "${presetsDirectory}"`; do
+        echo "    - ${p}"
+    done
+    exit 0
+fi
+
 templateDirectory="${PROJECT_DIR}/template"
 
 rawTargetDirectory="$1"
 if [ -z "$rawTargetDirectory" ]; then
     rawTargetDirectory='.'
 fi
+
+presetName="$2"
+if [ -z "$presetName" ]; then
+    presetName='default'
+fi
+presetDirectory="${presetsDirectory}/${presetName}"
+if ! [ -d "$presetDirectory" ]; then
+    echo "Preset not found: ${presetName}"
+    exit 1
+fi
+
 mkdir -p "$rawTargetDirectory"
 targetDirectory="$( cd "$rawTargetDirectory" && pwd )"
-
 rsync \
     --recursive \
     --ignore-existing \
     --executability \
     "${templateDirectory}/" \
     "${targetDirectory}/" &&
-    echo "Successfully created: ${targetDirectory}" ;
+rsync \
+    --recursive \
+    --ignore-existing \
+    --executability \
+    "${presetDirectory}/" \
+    "${targetDirectory}/" &&
+echo "Successfully created: ${targetDirectory}" ;

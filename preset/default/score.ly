@@ -9,10 +9,27 @@ headerData = \header {
 % define instruments here
 instruments = #'(
   ; tag name shortName midiInstrument
-  ( violin1 "Violin 1" "V1" "flute" )
-  ( violin2 "Violin 2" "V2" "clarinet" )
-  ( viola "Viola" "Va" "oboe" )
-  ( cello "Cello" "C" "cello" )
+  ( flute "Flute" "Fl" "flute" )
+  ( clarinet "Clarinet" "Cl" "clarinet" )
+  ( oboe "Oboe" "Ob" "oboe" )
+  ( bassoon "Bassoon" "Bs" "bassoon" )
+  ( celli "Celli" "Ci" "cello" )
+)
+
+instrumentLabels = #(map
+  (lambda (i) (list-ref i 0))
+ instruments
+)
+
+xxxxx =
+#(define-music-function
+  (barContent)
+  (cheap-list?)
+  #{ #@(map
+    (lambda (i) #{ \tag #(car i) $(cdr i) #} )
+    barContent
+  )
+  #}
 )
 
 data = {
@@ -30,12 +47,17 @@ data = {
   \key c \major
     \accidentalStyle modern
   
-  % write your music here
-  \tag #'violin1 { \clef treble c'16 c' c' c' c' c' c' c' c'2 }
-  \tag #'violin2 { \clef treble c'1 }
-  \tag #'viola   { \clef alto   c'1 }
-  \tag #'cello   { \clef bass   c'1 }
+  \tag #'flute    { \clef treble c''4 b' c''2 }
+  \tag #'clarinet { \clef treble e'4 f' e'2 }
+  \tag #'oboe     { \clef treble e'4 d' e'2 }
+  \tag #'bassoon  { \clef bass   g2 c }
+  \tag #'celli    { \clef bass   c4 g c'2 }
   |
+  
+  \xxxxx #(list
+    (cons 'flute #{ f'2 g' #} )
+    (cons 'oboe  #{ g'2 f' #} )
+  )
   
   \bar "|."
   
