@@ -18,17 +18,31 @@ instruments = #'(
 
 instrumentLabels = #(map
   (lambda (i) (list-ref i 0))
- instruments
+  instruments
 )
 
-xxxxx =
-#(define-music-function
-  (barContent)
-  (cheap-list?)
-  #{ #@(map
-    (lambda (i) #{ \tag #(car i) $(cdr i) #} )
-    barContent
+#(define (diff s1 s2)
+  (cond
+    ((null? s1) '())
+    ((not (member (car s1) s2)) (cons (car s1) (diff (cdr s1) s2)))
+    (else (diff (cdr s1) s2))
   )
+)
+
+createBar =
+#(define-music-function
+  (len barContent)
+  (number? cheap-list?)
+  #{
+    #@(map
+      (lambda (i) #{ \tag #(car i) $(cdr i) #} )
+      barContent
+    )
+    #@(map
+      (lambda (label) #{ \tag #label #(make-music 'MultiMeasureRestMusic 'duration (ly:make-duration 0 0 len)) #} )
+      (diff instrumentLabels (map (lambda (i) (list-ref i 0)) barContent))
+    )
+    |
   #}
 )
 
@@ -47,16 +61,53 @@ data = {
   \key c \major
     \accidentalStyle modern
   
-  \tag #'flute    { \clef treble c''4 b' c''2 }
-  \tag #'clarinet { \clef treble e'4 f' e'2 }
-  \tag #'oboe     { \clef treble e'4 d' e'2 }
-  \tag #'bassoon  { \clef bass   g2 c }
-  \tag #'celli    { \clef bass   c4 g c'2 }
-  |
+  \createBar #1 #(list
+    (cons 'flute    #{ \clef treble c''4 b' c''2 #} )
+    (cons 'clarinet #{ \clef treble e'4 f' e'2 #} )
+    (cons 'oboe     #{ \clef treble e'4 d' e'2 #} )
+    (cons 'bassoon  #{ \clef bass   g2 c #} )
+    (cons 'celli    #{ \clef bass   c4 g c'2 #} )
+  )
   
-  \xxxxx #(list
+  \createBar #1 #(list
     (cons 'flute #{ f'2 g' #} )
     (cons 'oboe  #{ g'2 f' #} )
+  )
+  
+  \repeat unfold 3 { 
+    \createBar #1 #(list
+      (cons 'celli #{ c16 d e f g a b c' d' c' b a g f e d #} )
+    )
+  }
+  
+  \createBar #1 #(list
+    (cons 'celli  #{ c1 #} )
+  )
+  
+  \break
+  
+  \createBar #1 #(list
+    (cons 'flute    #{ \clef treble c''1 #} )
+    (cons 'clarinet #{ \clef treble c''1 #} )
+    (cons 'oboe     #{ \clef treble e'1 #} )
+    (cons 'bassoon  #{ \clef bass   g1 #} )
+    (cons 'celli    #{ \clef bass   c'1 #} )
+  )
+  
+  \createBar #1 #(list
+    (cons 'flute    #{ \clef treble c''1 #} )
+    (cons 'clarinet #{ \clef treble b'1 #} )
+    (cons 'oboe     #{ \clef treble f'1 #} )
+    (cons 'bassoon  #{ \clef bass   as1 #} )
+    (cons 'celli    #{ \clef bass   g1 #} )
+  )
+  
+  \createBar #1 #(list
+    (cons 'flute    #{ \clef treble c''1 #} )
+    (cons 'clarinet #{ \clef treble c''1 #} )
+    (cons 'oboe     #{ \clef treble e'1 #} )
+    (cons 'bassoon  #{ \clef bass   g1 #} )
+    (cons 'celli    #{ \clef bass   c1 #} )
   )
   
   \bar "|."
