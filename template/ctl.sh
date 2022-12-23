@@ -14,6 +14,7 @@ if [ "$COMMAND" = 'help' ]; then
     echo '  play:    play the audio file'
     echo '  display: display the sheet music'
 elif [ "$COMMAND" = 'install' ]; then
+    sudo apt-get update &&
     sudo apt-get install lilypond &&
     sudo apt-get install musescore3 &&
     sudo apt-get install frescobaldi &&
