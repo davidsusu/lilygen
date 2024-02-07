@@ -36,10 +36,11 @@ echo 'export PATH="${PATH}:'"$installDir"'"' > ~/.bashrc.d/lilygen.bashrc
 ## Usage
 
 ```
-lilygen [<target-directory>]
+lilygen [<target-directory> [<preset>]]
 ```
 
-Default target directory is the current directory (`.`).
+The default target directory is the current directory (`.`).
+The default preset is an example ensemble (`default`).
 
 ## Template structure
 
